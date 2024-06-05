@@ -1,0 +1,10 @@
+Package: modelLong
+Type: Package
+Title: Model and visualize longitudinal data
+Version: 0.1.0
+Author: Alejandro Dionicio Hernandez
+Maintainer: Alejandro Dionicio Hernandez <alejh@uw.edu>
+Description: Package for easy fitting of linear mixed-effects models (LMM) and generalized estimating equations (GEE) for longitudinal data. Additional functions simplify creating GGPlot objects and constructing comprehensive data summaries.  
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
