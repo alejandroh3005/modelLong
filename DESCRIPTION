@@ -21,4 +21,4 @@ Suggests:
   dplyr,
   ggplot2
 VignetteBuilder: knitr
-
+URL: https://alejandroh3005.github.io/modelLong/
