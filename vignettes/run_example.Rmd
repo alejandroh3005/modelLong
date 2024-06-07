@@ -1,0 +1,58 @@
+---
+title: "Example script"
+output: 
+  bookdown::html_document2:
+    number_sections: false
+    toc: true
+    toc_float:
+      toc_collapsed: true
+    theme: united
+vignette: >
+  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{example-script}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+## Load data
+
+```{r load-data, warning=FALSE, message=FALSE}
+rm(list = ls())
+library(modelLong)
+
+# Load example longitudinal data (must be of long format)
+URL <- "https://raw.githubusercontent.com/alejandroh3005/longitudinal-data/main/data/cdc-birthwt.csv"
+data <- read.csv(URL)
+# Define binary group variable
+data$"Low weight" <- as.factor(ifelse(data$bweight < 1200, 1, 0))
+```
+
+## Summarize data
+
+Print Table 1.
+
+```{r summarize-data, warning=FALSE, message=FALSE}
+# Summarize data in Table 1, stratify summary by low weight status
+# Exclude Mother and Child ID in data summary
+summary_res <- modelLong::summary(data = data[-c(1, 5)],
+                                  group_var = "Low weight")
+summary_res$table1
+```
+
+## Plot data
+
+Plot repeated measures over time and ACF
+
+```{r plot-data, warning=FALSE, message=FALSE}
+# Create plots of repeated measures and ACF
+plot_res <- modelLong::plot(data = data,
+                            outcome = "bweight",
+                            time = "mage",
+                            id = "mid",
+                            col_group = "Low weight")
+plot_res$data_plot
+plot_res$acf_plot
+```
+
