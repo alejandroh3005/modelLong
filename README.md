@@ -4,7 +4,8 @@ output: github_document
 
 # Purpose
 
-This is package for UW BIOST 561 (Spring 2024), taught by Kevin Lin.
+This is package for fitting generalized linear mixed-effects models (GLMM) and generalized estimating equations (GEE). 
+There are also functions to visualize longitudinal data.
 
 - The URL to the GitHub (i.e., the source code) is: https://github.com/alejandroh3005/modelLong
 - The URL to the Pkgdown webpage is: https://alejandroh3005.github.io/
@@ -109,3 +110,7 @@ This package was developed in the following environment
  [2] /R/R-4.2.2/library
 ──────────────────────────────────────────────────
 ```
+
+# Acknowledgements
+
+Thank you to Dr. Kevin Lin for your kind instruction and encouragement! 
