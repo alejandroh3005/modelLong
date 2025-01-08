@@ -67,42 +67,57 @@
 <h2 id="load-data">Load data<a class="anchor" aria-label="anchor" href="#load-data"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html" class="external-link">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Clear environment</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span>list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ls.html" class="external-link">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Load relevant libraries</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alejandroh3005.github.io/modelLong/">modelLong</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Load example longitudinal data (must be of long format)</span></span>
-<span><span class="va">URL</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/alejandroh3005/longitudinal-data/main/data/cdc-birthwt.csv"</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">URL</span><span class="op">)</span></span>
-<span><span class="co"># Define binary group variable</span></span>
-<span><span class="va">data</span><span class="op">$</span><span class="st">"Low weight"</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">bweight</span> <span class="op">&lt;</span> <span class="fl">1200</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"../data/ortho.csv"</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">data_labelled</span> <span class="op">&lt;-</span> <span class="va">data</span></span>
+<span></span>
+<span><span class="co"># Rename variables</span></span>
+<span><span class="va">data_labelled</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span><span class="st">"Distance"</span> <span class="op">=</span> <span class="va">distance</span>, <span class="st">"Age"</span> <span class="op">=</span> <span class="va">age</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data_labelled</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data_labelled</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span>,<span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##     Subject    Sex Distance Age</span></span>
+<span><span class="co">## 151     M16   Male     26.1  18</span></span>
+<span><span class="co">## 63      M09   Male     31.0  12</span></span>
+<span><span class="co">## 102     F05 Female     23.5  14</span></span>
+<span><span class="co">## 111     M03   Male     27.9  16</span></span>
+<span><span class="co">## 47      F04 Female     24.5  10</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="summarize-data">Summarize data<a class="anchor" aria-label="anchor" href="#summarize-data"></a>
+<h2 id="data-summary">Data Summary<a class="anchor" aria-label="anchor" href="#data-summary"></a>
 </h2>
-<p>Print Table 1.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Summarize data in Table 1, stratify summary by low weight status</span></span>
-<span><span class="co"># Exclude Mother and Child ID in data summary</span></span>
-<span><span class="va">summary_res</span> <span class="op">&lt;-</span> <span class="fu">modelLong</span><span class="fu">::</span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>                                  group_var <span class="op">=</span> <span class="st">"Low weight"</span><span class="op">)</span></span>
-<span><span class="va">summary_res</span><span class="op">$</span><span class="va">table1</span></span></code></pre></div>
-<div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mwlefoodfi table {
+<p>Print a summary table of the orthodontist data.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Data summary, stratified by Sex</span></span>
+<span><span class="va">summary_res</span> <span class="op">&lt;-</span> <span class="va">data_labelled</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">modelLong</span><span class="fu">::</span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">.</span>,</span>
+<span>                     group_var <span class="op">=</span> <span class="st">"Sex"</span>,</span>
+<span>                     type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">Age</span> <span class="op">~</span> <span class="st">"continuous"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">summary_res</span><span class="op">$</span><span class="va">table1</span> </span></code></pre></div>
+<div id="dfieexombw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dfieexombw table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#mwlefoodfi thead, #mwlefoodfi tbody, #mwlefoodfi tfoot, #mwlefoodfi tr, #mwlefoodfi td, #mwlefoodfi th {
+#dfieexombw thead, #dfieexombw tbody, #dfieexombw tfoot, #dfieexombw tr, #dfieexombw td, #dfieexombw th {
   border-style: none;
 }
 
-#mwlefoodfi p {
+#dfieexombw p {
   margin: 0;
   padding: 0;
 }
 
-#mwlefoodfi .gt_table {
+#dfieexombw .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -128,12 +143,12 @@
   border-left-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_caption {
+#dfieexombw .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#mwlefoodfi .gt_title {
+#dfieexombw .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -145,7 +160,7 @@
   border-bottom-width: 0;
 }
 
-#mwlefoodfi .gt_subtitle {
+#dfieexombw .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -157,7 +172,7 @@
   border-top-width: 0;
 }
 
-#mwlefoodfi .gt_heading {
+#dfieexombw .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -169,13 +184,13 @@
   border-right-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_bottom_border {
+#dfieexombw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_col_headings {
+#dfieexombw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -190,7 +205,7 @@
   border-right-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_col_heading {
+#dfieexombw .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -210,7 +225,7 @@
   overflow-x: hidden;
 }
 
-#mwlefoodfi .gt_column_spanner_outer {
+#dfieexombw .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -222,15 +237,15 @@
   padding-right: 4px;
 }
 
-#mwlefoodfi .gt_column_spanner_outer:first-child {
+#dfieexombw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mwlefoodfi .gt_column_spanner_outer:last-child {
+#dfieexombw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mwlefoodfi .gt_column_spanner {
+#dfieexombw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -242,11 +257,11 @@
   width: 100%;
 }
 
-#mwlefoodfi .gt_spanner_row {
+#dfieexombw .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#mwlefoodfi .gt_group_heading {
+#dfieexombw .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -272,7 +287,7 @@
   text-align: left;
 }
 
-#mwlefoodfi .gt_empty_group_heading {
+#dfieexombw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -287,15 +302,15 @@
   vertical-align: middle;
 }
 
-#mwlefoodfi .gt_from_md > :first-child {
+#dfieexombw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mwlefoodfi .gt_from_md > :last-child {
+#dfieexombw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mwlefoodfi .gt_row {
+#dfieexombw .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -314,7 +329,7 @@
   overflow-x: hidden;
 }
 
-#mwlefoodfi .gt_stub {
+#dfieexombw .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -327,7 +342,7 @@
   padding-right: 5px;
 }
 
-#mwlefoodfi .gt_stub_row_group {
+#dfieexombw .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -341,15 +356,15 @@
   vertical-align: top;
 }
 
-#mwlefoodfi .gt_row_group_first td {
+#dfieexombw .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#mwlefoodfi .gt_row_group_first th {
+#dfieexombw .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#mwlefoodfi .gt_summary_row {
+#dfieexombw .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -359,16 +374,16 @@
   padding-right: 5px;
 }
 
-#mwlefoodfi .gt_first_summary_row {
+#dfieexombw .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_first_summary_row.thick {
+#dfieexombw .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#mwlefoodfi .gt_last_summary_row {
+#dfieexombw .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -378,7 +393,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_grand_summary_row {
+#dfieexombw .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -388,7 +403,7 @@
   padding-right: 5px;
 }
 
-#mwlefoodfi .gt_first_grand_summary_row {
+#dfieexombw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -398,7 +413,7 @@
   border-top-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_last_grand_summary_row_top {
+#dfieexombw .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -408,11 +423,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_striped {
+#dfieexombw .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mwlefoodfi .gt_table_body {
+#dfieexombw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -421,7 +436,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_footnotes {
+#dfieexombw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -435,7 +450,7 @@
   border-right-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_footnote {
+#dfieexombw .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -444,7 +459,7 @@
   padding-right: 5px;
 }
 
-#mwlefoodfi .gt_sourcenotes {
+#dfieexombw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -458,7 +473,7 @@
   border-right-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_sourcenote {
+#dfieexombw .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -466,72 +481,72 @@
   padding-right: 5px;
 }
 
-#mwlefoodfi .gt_left {
+#dfieexombw .gt_left {
   text-align: left;
 }
 
-#mwlefoodfi .gt_center {
+#dfieexombw .gt_center {
   text-align: center;
 }
 
-#mwlefoodfi .gt_right {
+#dfieexombw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mwlefoodfi .gt_font_normal {
+#dfieexombw .gt_font_normal {
   font-weight: normal;
 }
 
-#mwlefoodfi .gt_font_bold {
+#dfieexombw .gt_font_bold {
   font-weight: bold;
 }
 
-#mwlefoodfi .gt_font_italic {
+#dfieexombw .gt_font_italic {
   font-style: italic;
 }
 
-#mwlefoodfi .gt_super {
+#dfieexombw .gt_super {
   font-size: 65%;
 }
 
-#mwlefoodfi .gt_footnote_marks {
+#dfieexombw .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#mwlefoodfi .gt_asterisk {
+#dfieexombw .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#mwlefoodfi .gt_indent_1 {
+#dfieexombw .gt_indent_1 {
   text-indent: 5px;
 }
 
-#mwlefoodfi .gt_indent_2 {
+#dfieexombw .gt_indent_2 {
   text-indent: 10px;
 }
 
-#mwlefoodfi .gt_indent_3 {
+#dfieexombw .gt_indent_3 {
   text-indent: 15px;
 }
 
-#mwlefoodfi .gt_indent_4 {
+#dfieexombw .gt_indent_4 {
   text-indent: 20px;
 }
 
-#mwlefoodfi .gt_indent_5 {
+#dfieexombw .gt_indent_5 {
   text-indent: 25px;
 }
 
-#mwlefoodfi .katex-display {
+#dfieexombw .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#mwlefoodfi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#dfieexombw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -541,97 +556,70 @@
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" scope="col" id="label"><span class="gt_from_md"><strong>Variable</strong></span></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="2" colspan="1" scope="col" id="stat_0">
 <span class="gt_from_md"><strong>Overall</strong><br>
-N = 4,390</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+N = 162</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
 </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="**Low weight**">
-        <div class="gt_column_spanner"><span class="gt_from_md"><strong>Low weight</strong></span></div>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="**Sex**">
+        <div class="gt_column_spanner"><span class="gt_from_md"><strong>Sex</strong></span></div>
       </th>
     </tr>
 <tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_1">
-<span class="gt_from_md"><strong>0</strong><br>
-N = 4,360</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+<span class="gt_from_md"><strong>Female</strong><br>
+N = 66</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
 </th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_2">
-<span class="gt_from_md"><strong>1</strong><br>
-N = 30</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+<span class="gt_from_md"><strong>Male</strong><br>
+N = 96</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
 </th>
     </tr>
 </thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="label" class="gt_row gt_left" style="font-weight: bold;">border</td>
-<td headers="stat_0" class="gt_row gt_center"><br></td>
-<td headers="stat_1" class="gt_row gt_center"><br></td>
-<td headers="stat_2" class="gt_row gt_center"><br></td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">Distance</td>
+<td headers="stat_0" class="gt_row gt_center">24.72 (22.50, 26.50)</td>
+<td headers="stat_1" class="gt_row gt_center">23.09 (21.50, 24.60)</td>
+<td headers="stat_2" class="gt_row gt_center">25.83 (23.50, 27.50)</td>
 </tr>
 <tr>
-<td headers="label" class="gt_row gt_left">    1</td>
-<td headers="stat_0" class="gt_row gt_center">878 (20%)</td>
-<td headers="stat_1" class="gt_row gt_center">870 (20%)</td>
-<td headers="stat_2" class="gt_row gt_center">8 (27%)</td>
-</tr>
-<tr>
-<td headers="label" class="gt_row gt_left">    2</td>
-<td headers="stat_0" class="gt_row gt_center">878 (20%)</td>
-<td headers="stat_1" class="gt_row gt_center">874 (20%)</td>
-<td headers="stat_2" class="gt_row gt_center">4 (13%)</td>
-</tr>
-<tr>
-<td headers="label" class="gt_row gt_left">    3</td>
-<td headers="stat_0" class="gt_row gt_center">878 (20%)</td>
-<td headers="stat_1" class="gt_row gt_center">873 (20%)</td>
-<td headers="stat_2" class="gt_row gt_center">5 (17%)</td>
-</tr>
-<tr>
-<td headers="label" class="gt_row gt_left">    4</td>
-<td headers="stat_0" class="gt_row gt_center">878 (20%)</td>
-<td headers="stat_1" class="gt_row gt_center">870 (20%)</td>
-<td headers="stat_2" class="gt_row gt_center">8 (27%)</td>
-</tr>
-<tr>
-<td headers="label" class="gt_row gt_left">    5</td>
-<td headers="stat_0" class="gt_row gt_center">878 (20%)</td>
-<td headers="stat_1" class="gt_row gt_center">873 (20%)</td>
-<td headers="stat_2" class="gt_row gt_center">5 (17%)</td>
-</tr>
-<tr>
-<td headers="label" class="gt_row gt_left" style="font-weight: bold;">bweight</td>
-<td headers="stat_0" class="gt_row gt_center">3,156 (2,850, 3,515)</td>
-<td headers="stat_1" class="gt_row gt_center">3,172 (2,863, 3,515)</td>
-<td headers="stat_2" class="gt_row gt_center">854 (680, 1,090)</td>
-</tr>
-<tr>
-<td headers="label" class="gt_row gt_left" style="font-weight: bold;">mage</td>
-<td headers="stat_0" class="gt_row gt_center">22 (18, 24)</td>
-<td headers="stat_1" class="gt_row gt_center">22 (18, 24)</td>
-<td headers="stat_2" class="gt_row gt_center">21 (18, 24)</td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">Age</td>
+<td headers="stat_0" class="gt_row gt_center">13 (10, 16)</td>
+<td headers="stat_1" class="gt_row gt_center">13 (10, 16)</td>
+<td headers="stat_2" class="gt_row gt_center">13 (10, 16)</td>
 </tr>
 </tbody>
 <tfoot class="gt_footnotes"><tr>
 <td class="gt_footnote" colspan="4">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class="gt_from_md">n (%); Mean (Q1, Q3)</span>
+<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class="gt_from_md">Mean (Q1, Q3)</span>
 </td>
     </tr></tfoot>
 </table>
 </div>
 </div>
 <div class="section level2">
-<h2 id="plot-data">Plot data<a class="anchor" aria-label="anchor" href="#plot-data"></a>
+<h2 id="data-visualization">Data Visualization<a class="anchor" aria-label="anchor" href="#data-visualization"></a>
 </h2>
-<p>Plot repeated measures over time and ACF</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Create plots of repeated measures and ACF</span></span>
-<span><span class="va">plot_res</span> <span class="op">&lt;-</span> <span class="fu">modelLong</span><span class="fu">::</span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>,</span>
-<span>                            outcome <span class="op">=</span> <span class="st">"bweight"</span>,</span>
-<span>                            time <span class="op">=</span> <span class="st">"mage"</span>,</span>
-<span>                            id <span class="op">=</span> <span class="st">"mid"</span>,</span>
-<span>                            col_group <span class="op">=</span> <span class="st">"Low weight"</span><span class="op">)</span></span>
-<span><span class="va">plot_res</span><span class="op">$</span><span class="va">data_plot</span></span></code></pre></div>
-<p><img src="run_example_files/figure-html/plot-data-1.png" width="700"></p>
+<p>Plot repeated measures of adolescent tooth growth over time.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">plot_res</span><span class="op">$</span><span class="va">acf_plot</span></span></code></pre></div>
-<p><img src="run_example_files/figure-html/plot-data-2.png" width="700"></p>
+<code class="sourceCode R"><span><span class="co"># Create plot of repeated measures</span></span>
+<span><span class="va">plot_res</span> <span class="op">&lt;-</span> <span class="fu">modelLong</span><span class="fu">::</span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">data</span>, </span>
+<span>  outcome <span class="op">=</span> <span class="st">"distance"</span>, </span>
+<span>  time <span class="op">=</span> <span class="st">"age"</span>, </span>
+<span>  id <span class="op">=</span> <span class="st">"Subject"</span>,</span>
+<span>  group_var <span class="op">=</span> <span class="st">"Sex"</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">plot_res</span><span class="op">$</span><span class="va">data_plot</span> <span class="op">+</span></span>
+<span>  <span class="co"># Adjust labels and x-axis</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Repeated measures of tooth growth"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Age (years)"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Distance (mm)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">8</span>,<span class="fl">18</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="run_example_files/figure-html/plots-1.png" width="700"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">plot_res</span><span class="op">$</span><span class="va">acf_plot</span> <span class="op">+</span></span>
+<span>  <span class="co"># Adjust labels and x-axis</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Autocorrelation of tooth growth"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Age (years)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="run_example_files/figure-html/plots-2.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
