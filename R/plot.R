@@ -23,7 +23,8 @@ plot <- function(data, outcome, time, id, col_group = "") {
 
   # Organize data for plotting
   plot_data <- data %>%
-    dplyr::select(any_of(c(ID = id, Outcome = outcome, Time = time, Group = col_group))) %>%
+    dplyr::select(any_of(c(ID = id, Outcome = outcome,
+                           Time = time, Group = col_group))) %>%
     na.omit
 
   # Spaghetti plot of outcome over time
@@ -39,7 +40,8 @@ plot <- function(data, outcome, time, id, col_group = "") {
   }
   # Add title and theme
   gg_data <- gg_data +
-    labs(title = paste("Repeated measures of", outcome), x = time, y = outcome) +
+    labs(title = paste("Repeated measures of", outcome),
+         x = time, y = outcome) +
     theme_bw()
 
 
@@ -48,20 +50,11 @@ plot <- function(data, outcome, time, id, col_group = "") {
   # Plot ACF values
   gg_acf <- ggplot(mapping = aes(x = 1:length(acf_res), y = acf_res)) +
     geom_col() +
-    labs(title = paste("ACF of", outcome), x = paste("Difference in", time), y = "ACF") +
+    labs(title = paste("ACF of", outcome),
+         x = paste("Difference in", time),
+         y = "ACF") +
     theme_bw()
 
 
   return(list(data_plot = gg_data, acf_plot = gg_acf))
 }
-
-# data <- read.csv(
-#   "https://raw.githubusercontent.com/alejandroh3005/longitudinal-data/main/data/cdc-birthwt.csv")
-# data$"Low weight" <- as.factor(ifelse(data$bweight < 1200, 1, 0))
-# plot_res <- plot(data = data,
-#                  outcome = "bweight",
-#                  time = "mage",
-#                  id = "mid",
-#                  col_group = "Low weight")
-# plot_res$data_plot
-# plot_res$acf_plot

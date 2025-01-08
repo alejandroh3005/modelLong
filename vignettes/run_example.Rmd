@@ -18,41 +18,63 @@ editor_options:
 
 ## Load data
 
-```{r load-data, warning=FALSE, message=FALSE}
+```{r load}
+
+# Clear environment
 rm(list = ls())
+
+# Load relevant libraries
 library(modelLong)
+library(dplyr)
+library(ggplot2)
 
 # Load example longitudinal data (must be of long format)
-URL <- "https://raw.githubusercontent.com/alejandroh3005/longitudinal-data/main/data/cdc-birthwt.csv"
-data <- read.csv(URL)
-# Define binary group variable
-data$"Low weight" <- as.factor(ifelse(data$bweight < 1200, 1, 0))
+data <- read.csv("../data/ortho.csv")[-1]
+data_labelled <- data
+
+# Rename variables
+data_labelled <- data %>% dplyr::rename("Distance" = distance, "Age" = age)
+
+data_labelled[sample(nrow(data_labelled), 5),]
 ```
 
-## Summarize data
+## Data Summary
 
-Print Table 1.
+Print a summary table of the orthodontist data.
 
-```{r summarize-data, warning=FALSE, message=FALSE}
-# Summarize data in Table 1, stratify summary by low weight status
-# Exclude Mother and Child ID in data summary
-summary_res <- modelLong::summary(data = data[-c(1, 5)],
-                                  group_var = "Low weight")
-summary_res$table1
+```{r summary}
+# Data summary, stratified by Sex
+summary_res <- data_labelled[-1] %>%
+  modelLong::summary(data = .,
+                     group_var = "Sex",
+                     type = list(Age ~ "continuous"))
+summary_res$table1 
 ```
 
-## Plot data
+## Data Visualization
 
-Plot repeated measures over time and ACF
+Plot repeated measures of adolescent tooth growth over time.
 
-```{r plot-data, warning=FALSE, message=FALSE}
-# Create plots of repeated measures and ACF
-plot_res <- modelLong::plot(data = data,
-                            outcome = "bweight",
-                            time = "mage",
-                            id = "mid",
-                            col_group = "Low weight")
+```{r plots}
+# Create plot of repeated measures
+plot_res <- modelLong::plot(
+  data = data,
+  outcome = "bweight",
+  time = "mage",
+  id = "mid",
+  col_group = "Low weight")
+
+
+ggplot(data = data,
+       aes(x = age, y = distance)) +
+  geom_line(aes(group = Subject), alpha = 0.4) +
+  geom_point(data = data %>% group_by(age) %>% summarise(mean = mean(distance)),
+             aes(x = age, y = mean), size = 3) + 
+  xlab("Age (years)") + ylab("Distance (mm)") + theme_bw() + 
+  scale_x_continuous(breaks = seq(8,18,2))
+
 plot_res$data_plot
 plot_res$acf_plot
 ```
+
 

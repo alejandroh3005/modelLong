@@ -1,41 +1,41 @@
 #' Generate Table 1 summary by group
 #'
-#' @param data Data frame or list of  data
-#' @param group_var Character title of variable to stratify summaries
+#' @param data Data frame or list
+#' @param group_var Name of variable to stratify summary
+#' @param type List to assign variables to a given variable type
 #'
-#' @return List of GT object for Table 1 summary of data
+#' @return A "Table 1" type summary of data
 #' @export
 #'
 #' @examples
-summary <- function(data, group_var="") {
+summary <- function(data, group_var = NULL, type = NULL) {
+
+  # Load relevant libraries
   library(gtsummary)
   library(dplyr)
 
-  # Verify valid arguments
+  # Verify arguments are valid
   stopifnot(
-    typeof(group_var) == "character",
+    typeof(group_var) %in% c("NULL", "character"),
+    typeof(type) %in% c("NULL", "list"),
     typeof(data) == "list")
 
-  data <- data %>% dplyr::rename(Group = group_var)
-
+  # Create a gtsummary table
   gt_table1 <- data %>%
     gtsummary::tbl_summary(
-      by = Group,
+      by = group_var,
+      type = type,
       statistic = list(
-        all_continuous() ~ "{mean} ({p25}, {p75})", # mean (IQR) for continuous
-        all_categorical() ~ "{n} ({p}%)")) %>%   # count (percentage) for factors
+        # Mean (IQR) for numeric variables
+        all_continuous() ~ "{mean} ({p25}, {p75})",
+        # Count (Percent) for categorical variables
+        all_categorical() ~ "{n} ({p}%)")) %>%
     add_overall() %>%
-    bold_labels() %>%     # makes the labels bold
-    modify_header(label ~ "**Variable**") %>%  # Customize the header
+    bold_labels() %>%
+    modify_header(label ~ "**Variable**") %>%
     modify_spanning_header(c(stat_1, stat_2) ~ paste0("**", group_var, "**")) %>%
     as_gt()
 
+  # Return summary table
   return(list(table1 = gt_table1))
-}
-
-# data <- read.csv(
-#   "https://raw.githubusercontent.com/alejandroh3005/longitudinal-data/main/data/cdc-birthwt.csv")
-# data <- data[c("border", "bweight", "mage")]
-# data$"Low weight" <- as.factor(ifelse(data$bweight < 1200, 1, 0))
-# summary_res <- summary(data = data, group_var = "Low weight")
-# summary_res$table1
+  }
