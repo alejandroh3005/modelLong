@@ -1,18 +1,26 @@
 \name{summary}
 \alias{summary}
-\title{Generate Table 1 summary by group}
+\title{Summarize data in a table}
 \usage{
-summary(data, group_var)
+summary(data, group_var, type)
 }
 \description{
-Generates a Table 1 style summary of data, with an option variable to stratify results. All generated tables will include overall summary statistics.
+Generates a Table 1 style summary of data, with an optional variable to stratify descriptions (overall summary statistics are always included). Data must be in long format.
 }
 \examples{
-data <- read.csv(
-  "https://raw.githubusercontent.com/alejandroh3005/longitudinal-data/main/data/cdc-birthwt.csv")
-data <- data[c("border", "bweight", "mage")]
-data$"Low weight" <- as.factor(ifelse(data$bweight < 1200, 1, 0))
-summary_res <- summary(data = data, group_var = "Low weight")
-summary_res$table1
-}
+library(dplyr)
 
+# Load repeated measures of adolescent tooth growth (must be of long format)
+data <- read.csv(
+  "https://raw.githubusercontent.com/alejandroh3005/modelLong/main/data/ortho.csv")[-1]
+data <- data %>% dplyr::rename("Distance" = distance, "Age" = age)
+
+# Summarize data, stratify by sex, and ensure age is encoded as continuous
+summary_res <- modelLong::summary(data,
+                  group_var = "Sex",
+                  type = list(Age ~ "continuous"))
+
+# View summary table
+summary_res$table1
+
+}

@@ -18,7 +18,7 @@ editor_options:
 
 ## Load data
 
-```{r load}
+```{r load, warning=FALSE, message=FALSE}
 
 # Clear environment
 rm(list = ls())
@@ -42,7 +42,7 @@ data_labelled[sample(nrow(data_labelled), 5),]
 
 Print a summary table of the orthodontist data.
 
-```{r summary}
+```{r summary, warning=FALSE}
 # Data summary, stratified by Sex
 summary_res <- data_labelled[-1] %>%
   modelLong::summary(data = .,
@@ -58,23 +58,24 @@ Plot repeated measures of adolescent tooth growth over time.
 ```{r plots}
 # Create plot of repeated measures
 plot_res <- modelLong::plot(
-  data = data,
-  outcome = "bweight",
-  time = "mage",
-  id = "mid",
-  col_group = "Low weight")
+  data = data, 
+  outcome = "distance", 
+  time = "age", 
+  id = "Subject",
+  group_var = "Sex")
 
 
-ggplot(data = data,
-       aes(x = age, y = distance)) +
-  geom_line(aes(group = Subject), alpha = 0.4) +
-  geom_point(data = data %>% group_by(age) %>% summarise(mean = mean(distance)),
-             aes(x = age, y = mean), size = 3) + 
-  xlab("Age (years)") + ylab("Distance (mm)") + theme_bw() + 
+plot_res$data_plot +
+  # Adjust labels and x-axis
+  labs(title = "Repeated measures of tooth growth") +
+  xlab("Age (years)") + ylab("Distance (mm)") +
   scale_x_continuous(breaks = seq(8,18,2))
 
-plot_res$data_plot
-plot_res$acf_plot
+
+plot_res$acf_plot +
+  # Adjust labels and x-axis
+  labs(title = "Autocorrelation of tooth growth") + xlab("Age (years)")
+
 ```
 
 

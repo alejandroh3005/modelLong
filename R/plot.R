@@ -1,53 +1,64 @@
-#' Plot ACF and longitudinal data
+#' Plot repeated measures and autocorrelation
 #'
-#' @param data Data frame or list of  data
-#' @param outcome Character title of outcome variable from data
-#' @param time Character title of time variable from data
-#' @param id Character title of id variable from data
-#' @param col_group Character title of coloring variable from data
+#' @param data Data frame or list
+#' @param outcome Character name of outcome variable
+#' @param time Character name of time variable
+#' @param id Character name of identification variable
+#' @param col_group Character name of grouping variable
 #'
-#' @return List of GGplot objects for ACF values and longitudinal data
+#' @return List containing visualizations of autocorrelation and repeated measures as ggplot objects
 #' @export
 #'
 #' @examples
-plot <- function(data, outcome, time, id, col_group = "") {
+plot <- function(data, outcome, time, id, group_var = NULL) {
+
+  # Load relevant libraries
   library(dplyr)
   library(ggplot2)
 
-  # Verify valid arguments
+  # Verify arguments are valid
   stopifnot(
     typeof(outcome) == "character",
     typeof(time) == "character",
-    typeof(col_group) == "character",
+    typeof(group_var) %in% c("NULL", "character"),
     typeof(data) == "list")
 
+  ## Plot repeated measures
   # Organize data for plotting
   plot_data <- data %>%
     dplyr::select(any_of(c(ID = id, Outcome = outcome,
-                           Time = time, Group = col_group))) %>%
+                           Time = time, Group = group_var))) %>%
     na.omit
 
   # Spaghetti plot of outcome over time
-  if(col_group == "") {
+  if(is.null(group_var)) {
     # Create plots without coloring by group
-    gg_data <- ggplot2::ggplot(plot_data, aes(y = Outcome, x = Time)) +
-      geom_line(aes(group = ID), alpha = 0.3, color = "#FC600A")
+    gg <- ggplot2::ggplot(plot_data, aes(y = Outcome, x = Time)) +
+      geom_line(aes(group = ID), alpha = 0.4) +
+      # Add means
+      geom_point(data = plot_data %>% group_by(Time) %>%
+                   summarise(mean = mean(Outcome)),
+                 aes(x = Time, y = mean), size = 3)
   }
   else {
     # Create plots with coloring by group
-    gg_data <- ggplot(plot_data, aes(y = Outcome, x = Time, color = col_group)) +
-      geom_line(aes(group = ID, color = Group), alpha = 0.3)
-  }
+    gg <- ggplot(plot_data, aes(y = Outcome, x = Time, color = Group)) +
+      geom_line(aes(group = ID, color = Group), alpha = 0.4) +
+      # Add means
+      geom_point(data = plot_data %>% group_by(Group, Time) %>%
+                   summarise(mean = mean(Outcome)),
+                 aes(x = Time, y = mean, color = Group), size = 3)
+    }
+
   # Add title and theme
-  gg_data <- gg_data +
+  gg <- gg +
     labs(title = paste("Repeated measures of", outcome),
          x = time, y = outcome) +
     theme_bw()
 
-
-  # Autocorrelation function and plot
+  ## Plot autocorrelation
+  # Compute ACF plot its values
   acf_res <- acf(data %>% select(all_of(outcome)), plot = FALSE)$acf
-  # Plot ACF values
   gg_acf <- ggplot(mapping = aes(x = 1:length(acf_res), y = acf_res)) +
     geom_col() +
     labs(title = paste("ACF of", outcome),
@@ -55,6 +66,5 @@ plot <- function(data, outcome, time, id, col_group = "") {
          y = "ACF") +
     theme_bw()
 
-
-  return(list(data_plot = gg_data, acf_plot = gg_acf))
+  return(list(data_plot = gg, acf_plot = gg_acf))
 }

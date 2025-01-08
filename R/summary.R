@@ -1,10 +1,10 @@
-#' Generate Table 1 summary by group
+#' Summarize data in a table
 #'
 #' @param data Data frame or list
-#' @param group_var Name of variable to stratify summary
-#' @param type List to assign variables to a given variable type
+#' @param group_var Character name of variable to stratify summary
+#' @param type List assigning variables to their appropriate type
 #'
-#' @return A "Table 1" type summary of data
+#' @return List containing summary of data as a gt object
 #' @export
 #'
 #' @examples
