@@ -35,6 +35,7 @@ data_labelled <- data
 # Rename variables
 data_labelled <- data %>% dplyr::rename("Distance" = distance, "Age" = age)
 
+# Preview data
 data_labelled[sample(nrow(data_labelled), 5),]
 ```
 
@@ -44,9 +45,8 @@ Print a summary table of the orthodontist data.
 
 ```{r summary, warning=FALSE}
 # Data summary, stratified by Sex
-summary_res <- data_labelled[-1] %>%
-  modelLong::summary(
-    data = .,
+summary_res <- modelLong::summary(
+    data = data_labelled[-1], # Ignore Subject ID
     group_var = "Sex",
     type = list(Age ~ "continuous"))
 
@@ -77,5 +77,3 @@ plot_res$acf_plot +
   labs(title = "Autocorrelation of tooth growth") + xlab("Age (years)")
 
 ```
-
-

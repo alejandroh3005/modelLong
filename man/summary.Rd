@@ -14,7 +14,7 @@ colnames(data)[3:4] <- c("Distance", "Age")
 
 # Summarize data, stratify by sex, and ensure age is encoded as continuous
 summary_res <- modelLong::summary(
-  data = data,
+  data = data[-1],  # Ignore Subject ID
   group_var = "Sex",
   type = list(Age ~ "continuous"))
 
