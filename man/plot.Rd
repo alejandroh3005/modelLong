@@ -11,8 +11,7 @@ Plots repeated measures and averages over time, well as autocorrelation between 
 library(ggplot2)
 
 # Load repeated measures of adolescent tooth growth (must be of long format)
-data <- read.csv(
-  "https://raw.githubusercontent.com/alejandroh3005/modelLong/main/data/ortho.csv")[-1]
+data <- read.csv("https://raw.githubusercontent.com/alejandroh3005/modelLong/main/data/ortho.csv")[-1]
 
 # Plot the repeated measures and autocorrelation
 plot_res <- modelLong::plot(
@@ -31,7 +30,7 @@ plot_res$data_plot +
 
 # View autocorrelation plot
 plot_res$acf_plot +
-  # Adjust labels and x-axis
+  # Adjust labels
   labs(title = "Autocorrelation of tooth growth") + xlab("Age (years)")
 
 }
