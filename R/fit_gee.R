@@ -25,7 +25,7 @@ fit_gee <- function(data, formula, id, family = gaussian(), corstr = "independen
   model <- geepack::geeglm(
     formula = formula,
     data = data,
-    id = data[[id]],
+    id = id,
     family = family,
     corstr = corstr)
 

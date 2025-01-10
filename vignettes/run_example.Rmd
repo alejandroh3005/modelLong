@@ -18,25 +18,30 @@ editor_options:
 
 ## Load data
 
-```{r load, warning=FALSE, message=FALSE}
+```{r load}
+# Setup options
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 # Clear environment
 rm(list = ls())
 
 # Load relevant libraries
 library(modelLong)
-library(dplyr)
-library(ggplot2)
+library(dplyr)    # Data manipulation
+library(ggplot2)  # Data visualization
 
 # Load example longitudinal data (must be of long format)
-data <- read.csv("../data/ortho.csv")[-1]
-data_labelled <- data
+ortho <- read.csv("../data/ortho.csv")[-1]
+ortho <- ortho %>%
+  dplyr::mutate(Subject = as.factor(Subject)) %>%  # Make subject ID a factor
+  dplyr::arrange(Subject)  # Arrange measures by subject
+ortho_labelled <- ortho
 
-# Rename variables
-data_labelled <- data %>% dplyr::rename("Distance" = distance, "Age" = age)
+# Rename variables for (pretty printing) 
+ortho_labelled <- ortho %>% dplyr::rename("Distance" = distance, "Age" = age)
 
 # Preview data
-data_labelled[sample(nrow(data_labelled), 5),]
+ortho_labelled[sample(nrow(ortho_labelled), 5),]
 ```
 
 ## Data Summary
@@ -46,7 +51,7 @@ Print a summary table of the orthodontist data.
 ```{r summary, warning=FALSE}
 # Data summary, stratified by Sex
 summary_res <- modelLong::summary(
-    data = data_labelled[-1], # Ignore Subject ID
+    data = ortho_labelled[-1], # Ignore Subject ID
     group_var = "Sex",
     type = list(Age ~ "continuous"))
 
@@ -60,20 +65,59 @@ Plot repeated measures of adolescent tooth growth over time.
 ```{r plots}
 # Create plot of repeated measures
 plot_res <- modelLong::plot(
-  data = data, 
+  data = ortho, 
   outcome = "distance", 
   time = "age", 
   id = "Subject",
   group_var = "Sex")
 
+# Plot repeated measures
 plot_res$data_plot +
   # Adjust labels and x-axis
   labs(title = "Repeated measures of tooth growth") +
   xlab("Age (years)") + ylab("Distance (mm)") +
   scale_x_continuous(breaks = seq(8,18,2))
 
+# Plot autocorrelation
 plot_res$acf_plot +
-  # Adjust labels and x-axis
+  # Adjust labels
   labs(title = "Autocorrelation of tooth growth") + xlab("Age (years)")
+```
+
+## Data Modeling
+
+# Marginal effects with GEE
+
+Estimate the mean tooth growth associated with each sex population. This is suitable for a linear regression model fit with generalized estimating equations to account for the fact that our data is repeated measures over time; ignoring clusters and time may bias our estimates.
+
+```{r gee}
+# Fit a GEE model of adolescent tooth growth from age and sex
+id <- as.factor(ortho$Subject)
+
+mod_gee <- modelLong::fit_gee(
+  data = ortho, 
+  formula = formula(distance ~ age + Sex), 
+  id = id,
+  family = gaussian(), 
+  corstr = "independence")
+
+# Fitted coefficients
+coef(mod_gee$fit)
+
+# Full model
+mod_gee$fit
+```
+
+
+
+# Conditional effects with GLMM
+
+Estimate the mean tooth growth associated with each individual. This is well modeled by a  linear regression model fit with mixed-effects to account for the temporal and clustered structure of the data.
+
+```{r glmm}
 
 ```
+
+
+
+
