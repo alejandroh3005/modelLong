@@ -5,7 +5,7 @@
 summary(data, group_var, type)
 }
 \description{
-Generates a Table 1 style summary of data, with an optional variable to stratify descriptions (overall summary statistics are always included). Data must be in long format.
+Generate a Table 1 style summary of data, with an optional variable to stratify descriptions (overall summary statistics are always included). Data must be in long format.
 }
 \examples{
 # Load repeated measures of adolescent tooth growth (must be of long format)

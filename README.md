@@ -1,7 +1,7 @@
 
 # Purpose
 
-This is a package for easy visualization of longitudinal data and autocorrelation, as well as estimation of marginal effects with generalized estimating equations of estimation of conditional effects with mixed effects models.
+This is a package for easy visualization and modeling of longitudinal data. Functions plot repeated measures and estimate autocorrelation, marginal effects with generalized estimating equations, and conditional effects with generalized linear mixed-effects models.
 
 - The URL to the GitHub (i.e., the source code) is: https://github.com/alejandroh3005/modelLong
 - The URL to the Pkgdown webpage is: https://alejandroh3005.github.io/
@@ -22,7 +22,7 @@ library(modelLong)
 
 # Dependencies
 
-The package depends on the following packages: `dplyr`, `ggplot2`, `gtsummary`, `nlme`, and `geepack`.
+The package depends on the following packages: `dplyr`, `ggplot2`, `gtsummary`, `lme4`, and `geepack`.
 
 # Acknowledgements
 

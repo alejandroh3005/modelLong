@@ -66,5 +66,6 @@ plot <- function(data, outcome, time, id, group_var = NULL) {
          y = "ACF") +
     theme_bw()
 
+  # Return plots
   return(list(data_plot = gg, acf_plot = gg_acf))
 }

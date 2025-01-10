@@ -5,7 +5,7 @@
 plot(data, outcome, time, id, group_var)
 }
 \description{
-Plots repeated measures and averages over time, well as autocorrelation between those measures calculated with acf(). Returned ggplot objects may be further manipulated (to multiple facets, with additional layers, etc.). Data must be in long format.
+Plot repeated measures and averages over time, and autocorrelation between those measures calculated with acf(). Returned ggplot objects may be further manipulated (to multiple facets, with additional layers, etc.). Data must be in long format.
 }
 \examples{
 library(ggplot2)
