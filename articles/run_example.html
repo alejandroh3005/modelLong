@@ -655,7 +655,51 @@ estimates.</p>
 </h2>
 <p>Estimate the mean tooth growth associated with each individual. This
 is well modeled by a linear regression model fit with mixed-effects to
-account for the temporal and clustered structure of the data.</p>
+account each subject in the data.</p>
+<pre><code><span><span class="co">## $Subject</span></span>
+<span><span class="co">##     (Intercept)       age  SexMale</span></span>
+<span><span class="co">## F01    16.44088 0.4263492 2.737311</span></span>
+<span><span class="co">## F02    17.96976 0.4263492 2.737311</span></span>
+<span><span class="co">## F03    18.53544 0.4263492 2.737311</span></span>
+<span><span class="co">## F04    19.46805 0.4263492 2.737311</span></span>
+<span><span class="co">## F05    17.64869 0.4263492 2.737311</span></span>
+<span><span class="co">## F06    16.19626 0.4263492 2.737311</span></span>
+<span><span class="co">## F07    18.06149 0.4263492 2.737311</span></span>
+<span><span class="co">## F08    18.15322 0.4263492 2.737311</span></span>
+<span><span class="co">## F09    15.81404 0.4263492 2.737311</span></span>
+<span><span class="co">## F10    13.39842 0.4263492 2.737311</span></span>
+<span><span class="co">## F11    21.37915 0.4263492 2.737311</span></span>
+<span><span class="co">## M01    20.36644 0.4263492 2.737311</span></span>
+<span><span class="co">## M02    15.82568 0.4263492 2.737311</span></span>
+<span><span class="co">## M03    17.43100 0.4263492 2.737311</span></span>
+<span><span class="co">## M04    18.47064 0.4263492 2.737311</span></span>
+<span><span class="co">## M05    16.39137 0.4263492 2.737311</span></span>
+<span><span class="co">## M06    18.66939 0.4263492 2.737311</span></span>
+<span><span class="co">## M07    15.71866 0.4263492 2.737311</span></span>
+<span><span class="co">## M08    16.19261 0.4263492 2.737311</span></span>
+<span><span class="co">## M09    17.55331 0.4263492 2.737311</span></span>
+<span><span class="co">## M10    21.91060 0.4263492 2.737311</span></span>
+<span><span class="co">## M11    16.13146 0.4263492 2.737311</span></span>
+<span><span class="co">## M12    17.03349 0.4263492 2.737311</span></span>
+<span><span class="co">## M13    17.59918 0.4263492 2.737311</span></span>
+<span><span class="co">## M14    17.09465 0.4263492 2.737311</span></span>
+<span><span class="co">## M15    18.74583 0.4263492 2.737311</span></span>
+<span><span class="co">## M16    15.68808 0.4263492 2.737311</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## attr(,"class")</span></span>
+<span><span class="co">## [1] "coef.mer"</span></span></code></pre>
+<pre><code><span><span class="co">## Linear mixed model fit by REML ['lmerMod']</span></span>
+<span><span class="co">## Formula: distance ~ age + Sex + (1 | Subject)</span></span>
+<span><span class="co">##    Data: data</span></span>
+<span><span class="co">## REML criterion at convergence: 648.4082</span></span>
+<span><span class="co">## Random effects:</span></span>
+<span><span class="co">##  Groups   Name        Std.Dev.</span></span>
+<span><span class="co">##  Subject  (Intercept) 1.974   </span></span>
+<span><span class="co">##  Residual             1.452   </span></span>
+<span><span class="co">## Number of obs: 162, groups:  Subject, 27</span></span>
+<span><span class="co">## Fixed Effects:</span></span>
+<span><span class="co">## (Intercept)          age      SexMale  </span></span>
+<span><span class="co">##     17.5514       0.4263       2.7373</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
