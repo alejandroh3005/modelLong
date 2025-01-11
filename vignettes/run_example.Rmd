@@ -93,7 +93,6 @@ Estimate the mean tooth growth associated with each sex population. This is suit
 ```{r gee}
 # Fit a GEE model of adolescent tooth growth from age and sex
 id <- as.factor(ortho$Subject)
-
 mod_gee <- modelLong::fit_gee(
   data = ortho, 
   formula = formula(distance ~ age + Sex), 
@@ -108,16 +107,21 @@ coef(mod_gee$fit)
 mod_gee$fit
 ```
 
-
-
 # Conditional effects with GLMM
 
-Estimate the mean tooth growth associated with each individual. This is well modeled by a  linear regression model fit with mixed-effects to account for the temporal and clustered structure of the data.
+Estimate the mean tooth growth associated with each individual. This is well modeled by a  linear regression model fit with mixed-effects to account each subject in the data.
 
 ```{r glmm}
+# Fit a GLMM model of adolescent tooth growth from age and sex
+mod_glmm <- modelLong::fit_glmm(
+  data = ortho,
+  formula = formula(distance ~ age + Sex + (1 | Subject)),
+  family = gaussian)
 
+# Fitted coefficients
+coef(mod_glmm$fit)
+
+# Full model
+mod_glmm$fit
 ```
-
-
-
 
